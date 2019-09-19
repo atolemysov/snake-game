@@ -24,19 +24,16 @@ namespace GameEngine.Snack
         private bool dead; // Is the snake dead?
         private bool started; // Has the game been started?
 
-        private HashSet<int> repeatedSet = new HashSet<int>();
-        private int repeatCounter = 0;
-
         private ISnake snakeCharacter;
 
         static void Main(string[] args)
         {
-           
+
             // Create an instance
             SnakeGame s = new SnakeGame();
             // Construct the game
             s.Construct(50, 50, 10, 10, 30);
-            
+
             // Start the game
             s.Start();
         }
@@ -99,7 +96,7 @@ namespace GameEngine.Snack
             DrawGame();
 
             //GetMap();
-            
+
 
             Thread.Sleep(100);
         }
@@ -131,7 +128,7 @@ namespace GameEngine.Snack
 
         // Update the snake's position
         private void UpdateSnake()
-        {            
+        {
 
             // End game if snake is dead
             if (dead)
@@ -139,9 +136,9 @@ namespace GameEngine.Snack
 
             var direction = (SnakeDirection)dir;
             var action = snakeCharacter.GetNextDirection(direction);
-            
 
-            if( (action == SnakeDirection.Down && direction == SnakeDirection.Up) 
+
+            if ((action == SnakeDirection.Down && direction == SnakeDirection.Up)
                 || (action == SnakeDirection.Up && direction == SnakeDirection.Down)
                 || (action == SnakeDirection.Left && direction == SnakeDirection.Right)
                 || (action == SnakeDirection.Right && direction == SnakeDirection.Left))
@@ -150,7 +147,7 @@ namespace GameEngine.Snack
             }
             else
             {
-                dir = (int) action;
+                dir = (int)action;
             }
 
             //// Turn right
@@ -170,49 +167,29 @@ namespace GameEngine.Snack
             //}
 
 
-            int turnSize = 3;
-
-            if (repeatCounter > 100)
-            {
-                dead = true;
-                repeatedSet.Clear();
-                repeatCounter = 0;
-            }
+            int turnSize = 1;
 
             if (started)
             {
                 // Move in the direction
-                for (int i = 0; i < turnSize; i++)
-                { 
-                    switch (dir)
-                    {
-                        case 0: // UP
-                            snake.Insert(0, new SnakeSegment(snake[0].X, snake[0].Y - 1));
-                            if (!repeatedSet.Add(0))
-                                repeatCounter++;
-                            break;
-                        case 1: // RIGHT
-                            snake.Insert(0, new SnakeSegment(snake[0].X + 1, snake[0].Y));
-                            if (!repeatedSet.Add(1))
-                                repeatCounter++;
-                            break;
-                        case 2: // DOWN
-                            snake.Insert(0, new SnakeSegment(snake[0].X, snake[0].Y + 1));
-                            if (!repeatedSet.Add(2))
-                                repeatCounter++;
-                            break;
-                        case 3: // LEFT
-                            snake.Insert(0, new SnakeSegment(snake[0].X - 1, snake[0].Y));
-                            if (!repeatedSet.Add(3))
-                                repeatCounter++;
-                            break;
-                    }
-
-                    // Pop the tail
-                    snake.RemoveAt(snake.Count - 1);
-                    CheckCollisionOnlyForFood();
-
+                switch (dir)
+                {
+                    case 0: // UP
+                        snake.Insert(0, new SnakeSegment(snake[0].X, snake[0].Y - 1));
+                        break;
+                    case 1: // RIGHT
+                        snake.Insert(0, new SnakeSegment(snake[0].X + 1, snake[0].Y));
+                        break;
+                    case 2: // DOWN
+                        snake.Insert(0, new SnakeSegment(snake[0].X, snake[0].Y + 1));
+                        break;
+                    case 3: // LEFT
+                        snake.Insert(0, new SnakeSegment(snake[0].X - 1, snake[0].Y));
+                        break;
                 }
+
+                // Pop the tail
+                snake.RemoveAt(snake.Count - 1);
 
                 CheckCollision();
             }
@@ -224,13 +201,10 @@ namespace GameEngine.Snack
             // Check collision with food
             if (snake[0].X == foodX && snake[0].Y == foodY)
             {
-                score+= Math.Max(1, snake.Count / 3);
+                score += Math.Max(1, snake.Count / 3);
                 RandomizeFood();
 
                 snake.Add(new SnakeSegment(snake[snake.Count - 1].X, snake[snake.Count - 1].Y));
-
-                repeatCounter = 0;
-                repeatedSet.Clear();
             }
 
             // Check wall collision
@@ -241,18 +215,6 @@ namespace GameEngine.Snack
             for (int i = 1; i < snake.Count; i++)
                 if (snake[i].X == snake[0].X && snake[i].Y == snake[0].Y)
                     dead = true;
-        }
-
-        private void CheckCollisionOnlyForFood()
-        {
-            // Check collision with food
-            if (snake[0].X == foodX && snake[0].Y == foodY)
-            {
-                score += Math.Max(1, snake.Count / 3);
-                RandomizeFood();
-
-                snake.Add(new SnakeSegment(snake[snake.Count - 1].X, snake[snake.Count - 1].Y));
-            }
         }
 
         // Check if the game is started
@@ -288,7 +250,7 @@ namespace GameEngine.Snack
         /// <returns></returns>
         private string GetMap()
         {
-            
+
             var screen = this.GetScreen();
 
             var mapBuilder = new StringBuilder();
@@ -326,8 +288,8 @@ namespace GameEngine.Snack
 
 
             return mapBuilder.ToString();
-        }        
+        }
     }
 
-    
+
 }

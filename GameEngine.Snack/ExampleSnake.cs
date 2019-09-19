@@ -54,33 +54,61 @@ namespace GameEngine.Snack
                     return SnakeDirection.Up;
             }
 
+
+
             if (currentDirection == SnakeDirection.Up)
             {
-                if (_foodPosition.X < _myHeadPosition.X)
+                if (_foodPosition.Y > _myHeadPosition.Y)
+                {
                     return SnakeDirection.Left;
-                else
-                    return SnakeDirection.Right;
+                }
             }
             if (currentDirection == SnakeDirection.Right)
             {
-                if (_foodPosition.Y < _myHeadPosition.Y)
+                if (_foodPosition.X < _myHeadPosition.X)
+                {
                     return SnakeDirection.Up;
-                else
-                    return SnakeDirection.Down;
+                }
             }
             if (currentDirection == SnakeDirection.Down)
             {
-                if (_foodPosition.X > _myHeadPosition.X)
+                if (_foodPosition.Y < _myHeadPosition.Y)
+                {
                     return SnakeDirection.Right;
-                else
-                    return SnakeDirection.Left;
+                }
             }
             if (currentDirection == SnakeDirection.Left)
             {
-                if (_foodPosition.Y > _myHeadPosition.Y)
+                if (_foodPosition.X > _myHeadPosition.X)
+                {
                     return SnakeDirection.Down;
+                }
+            }
+
+
+
+            if (_foodPosition.X == _myHeadPosition.X)
+            {
+                if (_foodPosition.Y > _myHeadPosition.Y)
+                {
+                    return SnakeDirection.Down;
+                }
                 else
+                {
                     return SnakeDirection.Up;
+                }
+            }
+
+            if (_foodPosition.Y == _myHeadPosition.Y)
+            {
+                if (_foodPosition.X > _myHeadPosition.X)
+                {
+                    return SnakeDirection.Right;
+                }
+                else
+                {
+                    return SnakeDirection.Left;
+                }
             }
 
             return currentDirection;
